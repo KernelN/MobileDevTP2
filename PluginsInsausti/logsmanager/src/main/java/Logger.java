@@ -7,7 +7,7 @@ public class Logger {
         return _instance;
     }
 
-    public void SendLog(String msg){
-        Log.d(  tag: "L=>", msg);
+    public void SendLog(String msg) {
+        Log.d("L>", msg);
     }
 }
