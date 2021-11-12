@@ -362,6 +362,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   axisInput: {x: 0, y: 0}
+  player: {fileID: 1802201476}
 --- !u!1 &1163814648
 GameObject:
   m_ObjectHideFlags: 0
@@ -639,6 +640,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1802201475}
   - component: {fileID: 1802201474}
+  - component: {fileID: 1802201476}
   m_Layer: 0
   m_Name: Ship
   m_TagString: Player
@@ -685,11 +687,11 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 7f155af6fe7d4da46b4119e0ad53b4d7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 1
+  m_DrawMode: 0
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
@@ -705,8 +707,21 @@ Transform:
   m_GameObject: {fileID: 1802201473}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 1}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1802201476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1802201473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd70a69568e08c848acabe1234c01722, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 0.03
