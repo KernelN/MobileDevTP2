@@ -2,7 +2,7 @@
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] float followRadius;
+    [SerializeField] Vector2 followRange;
     [SerializeField] Transform player;
 
     #region Unity Events
@@ -24,34 +24,34 @@ public class CameraController : MonoBehaviour
     //}
     void FollowPlayer()
     {
-        if (Mathf.Abs(player.position.y - transform.position.y) > followRadius)
+        if (Mathf.Abs(player.position.y - transform.position.y) > followRange.y)
             transform.position = new Vector3(transform.position.x, GetNewYAxis(), transform.position.z);
 
-        if (Mathf.Abs(player.position.x - transform.position.x) > followRadius)
+        if (Mathf.Abs(player.position.x - transform.position.x) > followRange.x)
             transform.position = new Vector3(GetNewXAxis(), transform.position.y, transform.position.z);
     }
     float GetNewXAxis()
     {
-        if (player.position.x > transform.position.x + followRadius) //move to the right
+        if (player.position.x > transform.position.x + followRange.x) //move to the right
         {
-            return player.position.x - followRadius;
+            return player.position.x - followRange.x;
         }
-        else if (player.position.x < transform.position.x - followRadius) //move to the left
+        else if (player.position.x < transform.position.x - followRange.x) //move to the left
         {         
-            return player.position.x + followRadius;
+            return player.position.x + followRange.x;
         }
 
         return transform.position.x;
     }
     float GetNewYAxis()
     {
-        if (player.position.y > transform.position.y + followRadius)
+        if (player.position.y > transform.position.y + followRange.y)
         {
-            return player.position.y - followRadius;
+            return player.position.y - followRange.y;
         }
-        else if (player.position.y < transform.position.y - followRadius)
+        else if (player.position.y < transform.position.y - followRange.y)
         {
-            return player.position.y + followRadius;
+            return player.position.y + followRange.y;
         }
 
         return transform.position.y;

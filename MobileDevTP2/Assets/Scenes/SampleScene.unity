@@ -259,7 +259,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24575ed690356d546b35f46336eeb541, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  followRadius: 3
+  followRange: {x: 5, y: 3}
   player: {fileID: 0}
 --- !u!20 &519420031
 Camera:
