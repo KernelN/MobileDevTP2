@@ -1,19 +1,24 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class VirtualJoystick : MonoBehaviour, IDragHandler
 {
+    public Action<Vector2> InputRecieved;
     [SerializeField] RectTransform joystickHolder;
     [SerializeField] RectTransform joystick;
+    [SerializeField] InputManager inputManager;
 
     #region Unity Events
     private void Start()
     {
+        InputRecieved += inputManager.OnAxisInputReceived;
         joystick = GetComponent<RectTransform>();
     }
     public void OnDrag(PointerEventData eventData)
     {
         MoveStick(eventData.position);
+        InputRecieved?.Invoke(GetAxisOutput());
     }
     #endregion Unity Events
 
@@ -55,5 +60,9 @@ public class VirtualJoystick : MonoBehaviour, IDragHandler
         {
             return -joystickHolder.sizeDelta.y / 2 + joystickHolder.sizeDelta.x / 10;
         }
+    }
+    Vector2 GetAxisOutput()
+    {
+        return joystick.anchoredPosition.normalized;
     }
 }
