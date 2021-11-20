@@ -9,29 +9,37 @@ public class TurretController : MonoBehaviour, IComparer<Transform>
 	[SerializeField] ColliderListener fieldOfView;
 	[SerializeField] Transform currentTarget;
 	[SerializeField] List<Transform> targets;
-	[SerializeField] float rotationTimer;
+	[SerializeField] float rotationTimerMax;
     IHittable currentHittableTarget;
+    Vector2 originalRotation;
     Vector2 newDirection;
-    bool rotating = true;
+    float rotateTimer;
+    //bool rotating = true;
 
     //Unity Events
     private void Start()
     {
+        //Set Data
         if (data == null)
         {
             data = new TurretData();
         }
 
+        //Link Actions
         fieldOfView.CollisionEnter2D += OnCollisionEnter2D;
         fieldOfView.CollisionExit2D += OnCollisionExit2D;
 
+        //Set Shooting
         float shotsPerSecond = 1 / data.shootSpeed * data.shootSpeedMod;
         InvokeRepeating("ShootTarget", shotsPerSecond, shotsPerSecond);
+
+        //Set Rotation
+        originalRotation = transform.up;
+        rotateTimer = rotationTimerMax;
     }
     private void Update()
     {
-        if (rotating) return;
-        transform.up = newDirection;
+        LookAtTarget();
     }
 
     //Methods
@@ -39,29 +47,23 @@ public class TurretController : MonoBehaviour, IComparer<Transform>
     {
         data = newData;
     }
-    IEnumerator LookAtTarget(Vector2 targetPos)
+    void LookAtTarget()
     {
-        float rotateCountdown = 0;
-        newDirection = (targetPos - (Vector2)transform.position); //distance between turret and target
-        Vector2 originalRotation = transform.up;
-        
-        rotating = true;
-
         //Lerp the UP rotation of the transform until it becomes the new direction
-        do
-        {
-            transform.up = Vector2.Lerp(originalRotation, newDirection, rotateCountdown / rotationTimer);
-            rotateCountdown += Time.deltaTime;
-            yield return null;
-        } while (rotateCountdown <= rotationTimer);
-
-        rotating = false;
-
-        yield break;
+        transform.up = Vector2.Lerp(originalRotation, newDirection, rotateTimer / rotationTimerMax);
+        if (rotateTimer <= rotationTimerMax)
+            rotateTimer += Time.deltaTime;
     }
     void UpdateTargets()
     {
+        //Order List
         targets.Sort(Compare);
+        //Remove Target if not inside list
+        if(!targets.Contains(currentTarget))
+        {
+            currentTarget = null;
+        }
+        //Add new target if current is empty
         if(!currentTarget)
         {
             currentTarget = targets[0];
@@ -104,10 +106,9 @@ public class TurretController : MonoBehaviour, IComparer<Transform>
     //Event Receivers
     public	void OnNewTargetArea(Vector2 targetPosition)
     {
-        //StopCoroutine(LookAtTarget(targetPosition)); //NOT SURE IF IT WORKS
-        StopAllCoroutines();
-		transform.LookAt(targetPosition);
-        StartCoroutine(LookAtTarget(targetPosition));
+        originalRotation = transform.up;
+        newDirection = (targetPosition - (Vector2)transform.position); //distance between turret and target
+        rotateTimer = 0;
     }
     void OnCollisionEnter2D(Collision2D collision)
     {
@@ -123,7 +124,7 @@ public class TurretController : MonoBehaviour, IComparer<Transform>
         if (collision.gameObject.layer != LayerMask.NameToLayer("Enemies")) return;
         if (targets.Contains(collision.transform))
         {
-            targets.Remove(collision.transform);
+            targets.Remove(collision.transform);            
             UpdateTargets();
         }
     }    

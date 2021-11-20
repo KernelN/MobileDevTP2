@@ -217,9 +217,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bea0e49737724cc409b625a95354e09d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  data:
+    shootSpeed: 0
+    shootSpeedMod: 0
+    shootDamage: 0
+    shootDamageMod: 0
   fieldOfView: {fileID: 225955989}
   currentTarget: {fileID: 0}
-  rotateTimer: 1
+  targets: []
+  rotationTimerMax: 1
 --- !u!114 &225955989
 MonoBehaviour:
   m_ObjectHideFlags: 0

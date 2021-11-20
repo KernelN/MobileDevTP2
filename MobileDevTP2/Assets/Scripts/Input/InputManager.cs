@@ -5,6 +5,8 @@ public class InputManager : MonoBehaviour
 {
     public Action<Vector2> AxisInputReceived;
     public Action<Vector2> CircleInputReceived;
+    public Action<Vector2> WallInputReceived;
+    public Action<Vector2> FireInputReceived;
     [SerializeField] ShipController player;
     [SerializeField] TurretController turret;
     [SerializeField] Vector2 axisInput;
@@ -42,6 +44,32 @@ public class InputManager : MonoBehaviour
         {
             //send mid of circle to turret
             CircleInputReceived.Invoke(GetMidPosOfCircle(firstPos, midPos, lastPos));
+            return; //end method, as the gesture was already defined
+        }
+
+        //vertical angle x < 30 | x > 160
+        Vector2 shipPos = player.transform.position;
+        Vector2 closestPoint;
+        Vector2 farthestPoint;
+        if ((firstPos - shipPos).sqrMagnitude < (lastPos - shipPos).sqrMagnitude) //fist is closer
+        {
+            closestPoint = firstPos;
+            farthestPoint = lastPos;
+        }
+        else
+        {
+            closestPoint = lastPos;
+            farthestPoint = firstPos;
+        }
+        float lineAngle = Vector2.Angle(closestPoint - shipPos, farthestPoint - shipPos);
+
+        if (lineAngle < 20 || lineAngle > 160)
+        {
+            Debug.Log("Vertical");
+        }
+        else
+        {
+            Debug.Log("Horizontal");
         }
     }
 }
