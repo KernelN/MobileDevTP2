@@ -10,6 +10,8 @@ public class InputManager : MonoBehaviour
     [SerializeField] ShipController player;
     [SerializeField] TurretController turret;
     [SerializeField] Vector2 axisInput;
+    [Tooltip("X=Min,Y=Max")] 
+    [SerializeField] Vector2 lineAngleLimits;
 
     //Unity Events
     private void Start()
@@ -63,7 +65,7 @@ public class InputManager : MonoBehaviour
         }
         float lineAngle = Vector2.Angle(closestPoint - shipPos, farthestPoint - shipPos);
 
-        if (lineAngle < 20 || lineAngle > 160)
+        if (lineAngle < lineAngleLimits.x || lineAngle > lineAngleLimits.y)
         {
             Debug.Log("Vertical");
         }

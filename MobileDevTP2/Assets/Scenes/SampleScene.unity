@@ -482,6 +482,7 @@ MonoBehaviour:
   player: {fileID: 1802201476}
   turret: {fileID: 225955988}
   axisInput: {x: 0, y: 0}
+  lineAngleLimits: {x: 20, y: 160}
 --- !u!114 &1052830973
 MonoBehaviour:
   m_ObjectHideFlags: 0
