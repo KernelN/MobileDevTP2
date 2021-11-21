@@ -5,6 +5,6 @@ public class TurretData
 {
     public float shootSpeed;
     public float shootSpeedMod;
-    public float shootDamage;
+    public int shootDamage;
     public float shootDamageMod;
 }

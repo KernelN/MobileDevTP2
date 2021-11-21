@@ -56,13 +56,17 @@ public class TurretController : MonoBehaviour, IComparer<Transform>
     }
     void UpdateTargets()
     {
-        //Order List
-        targets.Sort(Compare);
         //Remove Target if not inside list
-        if(!targets.Contains(currentTarget))
+        if (!targets.Contains(currentTarget))
         {
             currentTarget = null;
         }
+
+        if (targets.Count < 1) return; //return if there are no targets 
+
+        //Order List
+        targets.Sort(Compare);
+        
         //Add new target if current is empty
         if(!currentTarget)
         {
@@ -83,7 +87,7 @@ public class TurretController : MonoBehaviour, IComparer<Transform>
         }
 
         //Shoot
-        currentHittableTarget?.Hitted();
+        currentHittableTarget?.Hitted((int)(data.shootDamage * data.shootDamageMod));
     }
 
     //Implementations

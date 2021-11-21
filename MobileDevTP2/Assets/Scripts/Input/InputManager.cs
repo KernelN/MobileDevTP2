@@ -5,32 +5,35 @@ public class InputManager : MonoBehaviour
 {
     public Action<Vector2> AxisInputReceived;
     public Action<Vector2> CircleInputReceived;
-    public Action<Vector2> WallInputReceived;
-    public Action<Vector2> FireInputReceived;
+    public Action<Vector2, Vector2, float> WallInputReceived;//midPos,angle,length
+    public Action<Vector2, Vector2, float> FireInputReceived;//midPos,angle,length
     [SerializeField] ShipController player;
     [SerializeField] TurretController turret;
+    [SerializeField] PowersManager powers;
     [SerializeField] Vector2 axisInput;
     [Tooltip("X=Min,Y=Max")] 
     [SerializeField] Vector2 lineAngleLimits;
+    [SerializeField] Transform TEMPwall; //TEMP
 
     //Unity Events
     private void Start()
     {
         AxisInputReceived += player.OnNewDirection;
         CircleInputReceived += turret.OnNewTargetArea;
+        WallInputReceived += powers.OnWallInputReceived;
     }
 
     //Methods
     Vector2 GetMidPosOfCircle(Vector2 firstTouch, Vector2 midTouch, Vector2 lastTouch)
     {
         //calculate midPos between first and mid touch
-        Vector2 firstToMid = Vector2.Lerp(firstTouch, midTouch, 0.5f);
+        Vector2 firstToMid = (firstTouch + midTouch) / 2;
      
         //calculate midPos between last and mid touch
-        Vector2 LastToMid = Vector2.Lerp(lastTouch, midTouch, 0.5f);
+        Vector2 LastToMid = (lastTouch + midTouch) / 2;
 
         //calculate final midPos
-        return Vector2.Lerp(firstToMid, LastToMid, 0.5f); 
+        return (firstToMid + LastToMid) / 2; 
     }
 
     //Event Receivers
@@ -65,13 +68,26 @@ public class InputManager : MonoBehaviour
         }
         float lineAngle = Vector2.Angle(closestPoint - shipPos, farthestPoint - shipPos);
 
+        float lineLenght;
+        Vector2 lineDirection = Vector2.Perpendicular(firstPos - lastPos).normalized;
+
         if (lineAngle < lineAngleLimits.x || lineAngle > lineAngleLimits.y)
         {
             Debug.Log("Vertical");
         }
         else
         {
-            Debug.Log("Horizontal");
+            //set lineLength
+            if (Mathf.Abs(midPos.x - shipPos.x) > Mathf.Abs(midPos.y - shipPos.y)) //if horizontal to player
+            {
+                lineLenght = Mathf.Abs(firstPos.y - lastPos.y);
+            }
+            else
+            {
+                lineLenght = Mathf.Abs(firstPos.x - lastPos.x);
+            }
+
+            WallInputReceived.Invoke(midPos, lineDirection, lineLenght);
         }
     }
 }
